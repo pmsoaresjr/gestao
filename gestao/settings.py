@@ -16,6 +16,7 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -41,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 ]
 LOCAL_APPS = [
-    "core"
+    'apps.home'  # Enable the inner home (home)
     ]
 
 INSTALLED_APPS = INSTALLED_APPS + LOCAL_APPS
@@ -57,11 +58,14 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'gestao.urls'
+LOGIN_REDIRECT_URL = "home"  # Route defined in home/urls.py
+LOGOUT_REDIRECT_URL = "home"  # Route defined in home/urls.py
+TEMPLATE_DIR = os.path.join(CORE_DIR, "apps/templates")  # ROOT dir for templates
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [TEMPLATE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,17 +127,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(CORE_DIR, 'staticfiles')
 
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(CORE_DIR, 'apps/static'),
+)
 
-# if DEBUG:
-#         STATICFILES_DIRS = [
-#             os.path.join(BASE_DIR, 'static')
-#        ]
-# else:
-#         STATIC_ROOT = '/home/paulo/Personal/personal-projects/teste-gestao/gestao/static'
-STATIC_ROOT = 'staticfiles'
-# STATIC_ROOT = '/home/paulo/Personal/personal-projects/teste-gestao/gestao/static/admin'
-STATIC_ROOT = os.path.join(BASE_DIR, 'core', 'static')
 MEDIA_URL = '/media/'
 
 # Default primary key field type

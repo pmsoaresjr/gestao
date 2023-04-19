@@ -22,16 +22,11 @@ from django.contrib.auth.decorators import login_required
 from django.conf.urls.static import static
 from django.conf import settings
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-]
-
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    # Dashboard
-    # Core
-    # path('core/',include('core.urls'))
+    path('admin/', admin.site.urls),          # Django admin route
+    path("", include("apps.authentication.urls")), # Auth routes - login / register
+    path("", include("apps.home.urls"))             # UI Kits Html files
 ]
 
 if settings.DEBUG:
