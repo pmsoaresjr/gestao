@@ -31,7 +31,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Dashboard
     # Core
-    path('core/',include('core.urls'))
+    # path('core/',include('core.urls'))
 ]
 
 if settings.DEBUG:
