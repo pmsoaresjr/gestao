@@ -29,6 +29,9 @@ def pages(request):
     try:
 
         load_template = request.path.split('/')[-1]
+        clientes = Cliente.objects.all()
+        print(f"clientes : {clientes}")
+        
         context["clientes"] = Cliente.objects.all()
 
 
