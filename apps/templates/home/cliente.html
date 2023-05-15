@@ -10,6 +10,8 @@
         <div class="row align-items-center py-4">
           <div class="col-lg-6 col-7">
             <h6 class="h2 text-white d-inline-block mb-0">Clientes</h6>
+            {{cliente}}
+            
             <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
               <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                 <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
@@ -43,23 +45,26 @@
                   <th scope="col" class="sort" data-sort="nome">Nome</th>
                   <th scope="col" class="sort" data-sort="cpf">CPF</th>
                   <th scope="col" class="sort" data-sort="endereco">Endereço</th>
-                  <th scope="col"></th>
+                  <th scope="col" class="sort" data-sort="endereco">Editar</th>
+                  <th scope="col" class="sort" data-sort="endereco">Excluir</th>
                 </tr>
               </thead>
               <tbody class="list">
+                {% for cliente in clientes %}
                 <tr>
                   <th scope="row">
-                    Paulo Márcio Soares JUnior
+                    {{cliente.nome}}
                   </th>
                   <td>
-                    1073774454619
+                    {{cliente.cpf}}
                   </td>
                   <td>
-                    Eduardo lopes 
+                    {{cliente.logradouro}}
                   </td>
                   <td>
                     </div>
                   </td>
+                  {% endfor %}
               </tbody>
             </table>
           </div>
