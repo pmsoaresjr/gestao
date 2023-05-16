@@ -9,7 +9,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
 from .models import Cliente
-from django.views.generic import ListView
+from .forms import ClienteForm
+from django.contrib import messages
+from django.shortcuts import render, redirect  
 
 
 
@@ -52,19 +54,41 @@ def pages(request):
         html_template = loader.get_template('home/page-500.html')
         return HttpResponse(html_template.render(context, request))
 
+@login_required(login_url="/login/")
+def cliente_lista(request):
+    context = {}
+    clientes = Cliente.objects.all()
+    print(f"clientes : {clientes}")
+        
+    context["clientes"] = Cliente.objects.all()
+    html_template = loader.get_template('home/cliente.html')
+    print(html_template)
+    
+    return HttpResponse(html_template.render(context, request))
 
 
-class BookListView(ListView):
-    model = Cliente
+@login_required(login_url="/login/")
+def cadastrar_cliente(request): 
+    context = {}
+    form =  ClienteForm(request.POST or None)
+    html_template = loader.get_template('home/cliente-registro.html')
+    context['form'] = form
+    if str(request.method) == 'POST':
+        if form.is_valid():
+            cliente = form.save()
+            messages.success(request,  'Cliente cadastrado com sucesso!')
+            return redirect('/cliente',cliente_lista=cliente_lista)
+            # return redirect('visualizar_cliente', cliente.id)
+            #return render(request,'visualizar_cliente.html',{'cliente' : form.cleaned_data})
+        else:
+            messages.error(request,  'Erro ao cadastrar o cliente. Contate o administrador')
+            
+    return HttpResponse(html_template.render(context, request))
 
-    def head(self, *args, **kwargs):
-        last_book = self.get_queryset().latest("data_criacao")
-        response = HttpResponse(
-            # RFC 1123 date format.
-            headers={
-                "Last-Modified": last_book.publication_date.strftime(
-                    "%a, %d %b %Y %H:%M:%S GMT"
-                )
-            },
-        )
-        return response
+@login_required(login_url="/login/")
+def deletar_cliente(request, id):
+    cliente = Cliente.objects.get(id=id)
+    print(cliente)  
+    cliente.delete() 
+    messages.success(request,  'Cliente Deletado com sucesso')
+    return redirect('/cliente',cliente_lista=cliente_lista)

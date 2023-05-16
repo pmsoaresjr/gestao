@@ -15,7 +15,7 @@
                 <li class="breadcrumb-item">
                   <a href="#"><i class="fas fa-home"></i></a>
                 </li>
-                <li class="breadcrumb-item"><a href="/cliente.html">Lista</a></li>
+                <li class="breadcrumb-item"><a href="/cliente/">Lista</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Clientes</li>
 
             </nav>
@@ -32,18 +32,15 @@
         <div class="card bg-default shadow">
           <div class="card-header bg-transparent border-0">
             <div class="card-body">
+            <form action="{% url 'home:cadastrar_cliente' %}" method="post">
+              {% csrf_token %}
               <div class="row">
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label class="form-control-label" for="example3cols1Input"
-                      >One of three cols</label
+                    <label class="form-control-label" for="example3cols2Input"
+                      >Nome</label
                     >
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="example3cols1Input"
-                      placeholder="One of three cols"
-                    />
+                    {{ form.nome }}
                   </div>
                 </div>
                 <div class="col-md-4">
@@ -127,6 +124,7 @@
                   </div>
                 </div>
               </div>
+            
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
@@ -153,9 +151,13 @@
                       placeholder="One of two cols"
                     />
                   </div>
+                  <div class="form-group">
+                    <input class="btn btn-primary" type="submit" value="Submit">
+                </div>
                 </div>
               </div>
-            </div>
+              </div>
+            </form>
           </div>
         </div>
   
@@ -166,6 +168,5 @@
   
       <!-- Specific JS goes HERE -->
       {% block javascripts %}{% endblock javascripts %}
-    </div>
   </div>
   
