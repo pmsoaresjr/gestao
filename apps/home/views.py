@@ -74,6 +74,7 @@ def cadastrar_cliente(request):
     html_template = loader.get_template('home/cliente-registro.html')
     context['form'] = form
     if str(request.method) == 'POST':
+        print(f"validação do form {form.is_valid()}")
         if form.is_valid():
             cliente = form.save()
             messages.success(request,  'Cliente cadastrado com sucesso!')
@@ -81,6 +82,7 @@ def cadastrar_cliente(request):
             # return redirect('visualizar_cliente', cliente.id)
             #return render(request,'visualizar_cliente.html',{'cliente' : form.cleaned_data})
         else:
+            print(form.errors.as_data())
             messages.error(request,  'Erro ao cadastrar o cliente. Contate o administrador')
             
     return HttpResponse(html_template.render(context, request))
