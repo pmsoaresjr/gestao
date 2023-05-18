@@ -6,8 +6,8 @@ class ClienteForm (ModelForm):
     class Meta:
         model = Cliente
         fields = ["nome", "telefone"]
-        widgets = { 'nome': forms.TextInput(attrs={'class': 'form-control'}) ,
-                   'telefone': forms.TextInput(attrs={'class': 'form-control'}) 
+        widgets = { 'nome': forms.TextInput(attrs={'class': 'form-control',"label":"Please enter your email address"}) ,
+                   'telefone': forms.TextInput(attrs={'class': 'form-control','mask':"000-000-0000"}) 
                    
                    }
         # widgets = { 'cpf': forms.TextInput(attrs={'class': 'form-control'}) }

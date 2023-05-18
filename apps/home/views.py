@@ -11,7 +11,7 @@ from django.urls import reverse
 from .models import Cliente
 from .forms import ClienteForm
 from django.contrib import messages
-from django.shortcuts import render, redirect  
+from django.shortcuts import render, redirect, get_object_or_404
 
 
 
@@ -32,7 +32,7 @@ def pages(request):
 
         load_template = request.path.split('/')[-1]
         clientes = Cliente.objects.all()
-        print(f"clientes : {clientes}")
+        # print(f"clientes : {clientes}")
         
         context["clientes"] = Cliente.objects.all()
 
@@ -58,23 +58,25 @@ def pages(request):
 def cliente_lista(request):
     context = {}
     clientes = Cliente.objects.all()
-    print(f"clientes : {clientes}")
+    # print(f"clientes : {clientes}")
         
     context["clientes"] = Cliente.objects.all()
     html_template = loader.get_template('home/cliente.html')
-    print(html_template)
+    # print(html_template)
     
     return HttpResponse(html_template.render(context, request))
 
 
 @login_required(login_url="/login/")
 def cadastrar_cliente(request): 
+    print("debug estou na função cadastrar cliente")
+
     context = {}
     form =  ClienteForm(request.POST or None)
     html_template = loader.get_template('home/cliente-registro.html')
     context['form'] = form
     if str(request.method) == 'POST':
-        print(f"validação do form {form.is_valid()}")
+        print(f"validação do form [cadastrar cliente] {form.is_valid()}")
         if form.is_valid():
             cliente = form.save()
             messages.success(request,  'Cliente cadastrado com sucesso!')
@@ -90,7 +92,25 @@ def cadastrar_cliente(request):
 @login_required(login_url="/login/")
 def deletar_cliente(request, id):
     cliente = Cliente.objects.get(id=id)
-    print(cliente)  
+    # print(cliente)  
     cliente.delete() 
     messages.success(request,  'Cliente Deletado com sucesso')
     return redirect('/cliente',cliente_lista=cliente_lista)
+
+@login_required(login_url="/login/")
+def atualizar_cliente(request,id):
+    print("debug estou na função atualizar cliente")
+    print(f"id [atualizar cliente]: {id}")
+    context = {}
+    html_template = loader.get_template('home/cliente-registro.html')
+    cliente = get_object_or_404(Cliente, pk=id)
+    form = ClienteForm(request.POST or None, instance=cliente)
+    context['form'] = form
+    if form.is_valid():
+        print(f"validação do form [atualizar cliente] {form.is_valid()}")
+
+        form.save()
+        return redirect('/cliente',cliente_lista=cliente_lista)
+    # context = {"form": form}
+    # return render(request, html_template, context)
+    return HttpResponse(html_template.render(context, request))
